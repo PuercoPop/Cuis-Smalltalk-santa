@@ -1,13 +1,33 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3403] on 15 August 2018 at 11:22:57 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3403] on 15 August 2018 at 11:29:23 pm'!
 'Description A program to draw names before Christmas. Names are listed in a text file:
 
 name1				"Single"
 name2 & name3	"Couples"
 
 See class comment for rules.'!
-!provides: 'SecretSanta' 1 8!
+!provides: 'SecretSanta' 1 9!
 SystemOrganization addCategory: #SecretSanta!
 
+
+!classDefinition: #SSLedger category: #SecretSanta!
+Object subclass: #SSLedger
+	instanceVariableNames: 'participants'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'SecretSanta'!
+!classDefinition: 'SSLedger class' category: #SecretSanta!
+SSLedger class
+	instanceVariableNames: ''!
+
+!classDefinition: #SSParticipant category: #SecretSanta!
+Object subclass: #SSParticipant
+	instanceVariableNames: 'name'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'SecretSanta'!
+!classDefinition: 'SSParticipant class' category: #SecretSanta!
+SSParticipant class
+	instanceVariableNames: ''!
 
 !classDefinition: #SecretSanta category: #SecretSanta!
 Object subclass: #SecretSanta
@@ -19,6 +39,18 @@ Object subclass: #SecretSanta
 SecretSanta class
 	instanceVariableNames: ''!
 
+
+!SSLedger commentStamp: '<historical>' prior: 0!
+The list of participants of the Secrent Santa!
+
+!SSParticipant commentStamp: '<historical>' prior: 0!
+A participant of a Secret Santa round.
+
+name: The name of the participant.
+
+TODO
+
+Keep track of who they can't draw.!
 
 !SecretSanta commentStamp: 'dhn 11/2/2017 15:08:59' prior: 0!
 This class performs an annual drawing of names, ensuring that certain rules are followed.
@@ -35,6 +67,10 @@ Can not be a repeat of the last 3 years
 
 Names can be drawn even if there is no history for "the last 3 years".
 The results are appended to the output file as long as you specify to save the drawing results. In this way, history is built up over time.!
+
+!SSLedger methodsFor: 'initialization' stamp: 'JO 8/15/2018 23:28:56'!
+initialize
+	^ Morph ! !
 
 !SecretSanta methodsFor: 'output' stamp: 'dhn 3/8/2015 20:13'!
 display: anObject

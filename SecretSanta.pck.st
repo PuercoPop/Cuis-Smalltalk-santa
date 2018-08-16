@@ -1,13 +1,23 @@
-'From Cuis 5.0 of 7 November 2016 [latest update: #3403] on 15 August 2018 at 11:29:23 pm'!
+'From Cuis 5.0 of 7 November 2016 [latest update: #3403] on 16 August 2018 at 8:44:01 am'!
 'Description A program to draw names before Christmas. Names are listed in a text file:
 
 name1				"Single"
 name2 & name3	"Couples"
 
 See class comment for rules.'!
-!provides: 'SecretSanta' 1 9!
+!provides: 'SecretSanta' 1 10!
 SystemOrganization addCategory: #SecretSanta!
 
+
+!classDefinition: #SSAddParticipantMorph category: #SecretSanta!
+FillInTheBlankMorph subclass: #SSAddParticipantMorph
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'SecretSanta'!
+!classDefinition: 'SSAddParticipantMorph class' category: #SecretSanta!
+SSAddParticipantMorph class
+	instanceVariableNames: ''!
 
 !classDefinition: #SSLedger category: #SecretSanta!
 Object subclass: #SSLedger
@@ -40,6 +50,9 @@ SecretSanta class
 	instanceVariableNames: ''!
 
 
+!SSAddParticipantMorph commentStamp: '<historical>' prior: 0!
+A FillInTheBlankMorph with its UI customized adding a participant to the Secret Santa.!
+
 !SSLedger commentStamp: '<historical>' prior: 0!
 The list of participants of the Secrent Santa!
 
@@ -68,9 +81,52 @@ Can not be a repeat of the last 3 years
 Names can be drawn even if there is no history for "the last 3 years".
 The results are appended to the output file as long as you specify to save the drawing results. In this way, history is built up over time.!
 
-!SSLedger methodsFor: 'initialization' stamp: 'JO 8/15/2018 23:28:56'!
+!SSAddParticipantMorph methodsFor: 'initialization' stamp: 'JO 8/16/2018 08:30:30'!
+createAcceptButton
+	"create the [accept] button"
+	| result |
+	result _ PluggableButtonMorph new
+		model: self;
+		color: Theme current acceptButton;
+		label: 'Add Particpant';
+		action: #acceptClicked.
+	result morphExtent: `8@2` * self sizeUnit.
+	self
+		addMorph: result
+		position: `2@7.5` * self sizeUnit // 1.
+	^ result.! !
+
+!SSAddParticipantMorph methodsFor: 'menu' stamp: 'JO 8/16/2018 08:38:52'!
+acceptClicked
+	| name |
+	name _ super.
+	^ SSParticipant withName: name.! !
+
+!SSLedger methodsFor: 'initialization' stamp: 'JO 8/16/2018 08:19:41'!
 initialize
-	^ Morph ! !
+	super.! !
+
+!SSLedger methodsFor: 'action' stamp: 'JO 8/16/2018 08:42:17'!
+askForParticipant
+	| participant |
+	participant _ SSAddParticipantMorph request: 'Participant s name?'.
+	Transcript log: participant.
+	Transcript log: participant class.
+	^ participant.! !
+
+!SSParticipant methodsFor: 'accessing' stamp: 'JO 8/16/2018 08:35:54'!
+name
+	^ name.! !
+
+!SSParticipant methodsFor: 'accessing' stamp: 'JO 8/16/2018 08:35:46'!
+name: aString
+	name _ aString.! !
+
+!SSParticipant class methodsFor: 'initialization' stamp: 'JO 8/16/2018 08:41:01'!
+withName: aName
+	^ self
+		new
+		name: aName.! !
 
 !SecretSanta methodsFor: 'output' stamp: 'dhn 3/8/2015 20:13'!
 display: anObject
